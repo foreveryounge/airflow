@@ -4,7 +4,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from common.common_func import regist2
 
-tz = pendulum.timezone(tz="Asia/Seoul")
+tz = pendulum.timezone("Asia/Seoul")
 
 with DAG(
     dag_id="dags_python_with_op_kwargs",
