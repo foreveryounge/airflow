@@ -13,7 +13,7 @@ with DAG(
     catchup=True,
 ) as dag:
 
-    @task(taks_id="python_task")
+    @task(task_id="python_task")
     def show_template(**kwargs):
         pprint(kwargs)
 
