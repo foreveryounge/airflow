@@ -30,7 +30,7 @@ with DAG(
     def get_datetime_calc(**kwargs):
         from dateutil.relativedelta import relativedelta
 
-        data_interval_end = kwargs["data_inerval_end"]
+        data_interval_end = kwargs["data_interval_end"]
         prev_month_day_first = data_interval_end.in_timezone(
             "Asia/Seoul"
         ) + relativedelta(months=-1, day=1)
