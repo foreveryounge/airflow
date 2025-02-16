@@ -47,7 +47,7 @@ class SeoulApiToCsvOperator(BaseOperator):
 
         headers = {
             "Content-type": "application/json",
-            "Charset": "utf-8",
+            "charset": "utf-8",
             "Accept": "*/*",
         }
 
