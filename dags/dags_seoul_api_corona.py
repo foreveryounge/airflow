@@ -13,7 +13,7 @@ with DAG(
     tb_cycle_rent_use_dayinfo = SeoulApiToCsvOperator(
         task_id="tb_cycle_rent_use_dayinfo",
         dataset_nm="tbCycleRentUseDayInfo",
-        path="/opt/airflow/files/tbCycleRentUseDayInfo/{{data_interval_end.in_timezone('Asia/Seoul') | ds_nodash}}",
+        path="/opt/airflow/files/tbCycleRentUseDayInfo/{{data_interval_end.in_timezone('Asia/Seoul') - macros.dateutil.relativedelta.relativedelta(days=1) | ds_nodash}}",
         file_name="tbCycleRentUseDayInfo.csv",
     )
 
@@ -21,7 +21,7 @@ with DAG(
     tb_cycle_failure_report = SeoulApiToCsvOperator(
         task_id="tb_cycle_failure_report",
         dataset_nm="tbCycleFailureReport",
-        path="/opt/airflow/files/tbCycleFailureReport/{{data_interval_end.in_timezone('Asia/Seoul') | ds_nodash}}",
+        path="/opt/airflow/files/tbCycleFailureReport/{{data_interval_end.in_timezone('Asia/Seoul') - macros.dateutil.relativedelta.relativedelta(days=1) | ds_nodash}}",
         file_name="tbCycleFailureReport.csv",
     )
 
