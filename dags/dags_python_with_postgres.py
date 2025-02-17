@@ -9,13 +9,13 @@ with DAG(
     catchup=False,
 ) as dag:
 
-    def insrt_postgres(ip, port, dbname, user, passwd, **kwargs):
+    def insrt_postgres(ip, port, dbname, user, password, **kwargs):
         import psycopg2
         from contextlib import closing
 
         with closing(
             psycopg2.connect(
-                host=ip, port=int(port), dbname=dbname, user=user, passwd=passwd
+                host=ip, port=int(port), dbname=dbname, user=user, password=password
             )
         ) as conn:
             with closing(conn.cursor()) as cursor:
