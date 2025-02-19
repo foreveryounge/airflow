@@ -16,9 +16,9 @@ with DAG(
         postgres_hook = PostgresHook(postgres_conn_id)
         with closing(postgres_hook.get_conn()) as conn:
             with closing(conn.cursor()) as cursor:
-                dag_id = kwargs.get["ti"].dag_id
-                task_id = kwargs.get["ti"].task_id
-                run_id = kwargs.get["ti"].run_id
+                dag_id = kwargs.get("ti").dag_id
+                task_id = kwargs.get("ti").task_id
+                run_id = kwargs.get("ti").run_id
                 msg = "hook insrt 수행"
                 sql = "insert into py_opr_insrt values (%s, %s, %s, %s);"
                 cursor.execute(sql, (dag_id, task_id, run_id, msg))
