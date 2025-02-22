@@ -48,7 +48,7 @@ class SeoulApiToCsvOperator(BaseOperator):
         from requests.adapters import HTTPAdapter
 
         headers = {
-            "Content-type": "application/json",
+            "Content-Type": "application/json",
             "charset": "utf-8",
             "Accept": "*/*",
         }
@@ -59,14 +59,13 @@ class SeoulApiToCsvOperator(BaseOperator):
 
         retry_strategy = Retry(
             total=5,  # Maximum number of retries
-            status_forcelist=[429, 500, 502, 503, 504],
+            status_forcelist=[500, 502, 503, 504],
         )
         session = requests.Session()
         # # Create an HTTP adapter with the retry strategy and mount it to session
         adapter = HTTPAdapter(max_retries=retry_strategy)
         session.mount("http://", adapter)
         session.mount("https://", adapter)
-        session.headers.update({"Connection": "keep-alive"})
 
         response = session.get(request_url, headers=headers)
         contents = json.loads(response.text)
