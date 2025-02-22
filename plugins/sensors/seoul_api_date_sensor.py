@@ -35,7 +35,7 @@ class SeoulApiDateSensor(BaseSensorOperator):
 
         connection = BaseHook.get_connection(self.http_conn_id)
         url = (
-            f"http://{connection.host}/{connection.port}/{self.endpoint}/{self.base_dt}"
+            f"http://{connection.host}:{connection.port}/{self.endpoint}/{self.base_dt}"
         )
         self.log.info(f"request url:{url}")
         response = requests.get(url)
