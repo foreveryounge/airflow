@@ -33,6 +33,10 @@ class SeoulApiDateSensor(BaseSensorOperator):
         from dateutil.relativedelta import relativedelta
 
         connection = BaseHook.get_connection(self.http_conn_id)
+        search_ymd = (
+            context.get("data_interval_end").in_timezone("Asia/Seoul")
+            + relativedelta(days=self.day_off)
+        ).strftime("%Y-%m-%d")
         url = f"http://{connection.host}/{connection.port}/{self.endpoint}/{search_ymd}"
         self.log.info(f"request url:{url}")
         response = requests.get(url)
@@ -43,10 +47,6 @@ class SeoulApiDateSensor(BaseSensorOperator):
         last_dt = row_data[0].get(self.base_dt_col)
         last_date = last_dt[:10]
         last_date = last_date.replace(".", "-").replace("/", "-")
-        search_ymd = (
-            context.get("data_interval_end").in_timezone("Asia/Seoul")
-            + relativedelta(days=self.day_off)
-        ).strftime("%Y-%m-%d")
 
         try:
             import pendulum
