@@ -10,12 +10,12 @@ with DAG(
     catchup=False,
 ) as dag:
 
-    def check_api_update(http_conn_id, endpoint, base_dt_col, **kwargs):
+    def check_api_update(http_conn_id, endpoint, base_dt_col, base_dt, **kwargs):
         import requests
         import json
 
         connection = BaseHook.get_connection(http_conn_id)
-        url = f"http://{connection.host}:{connection.port}/{endpoint}/1/100"
+        url = f"http://{connection.host}:{connection.port}/{endpoint}/1/100/{base_dt}"
         response = requests.get(url)
 
         contents = json.loads(response.text)
@@ -56,6 +56,7 @@ with DAG(
             "http_conn_id": "openapi.seoul.go.kr",
             "endpoint": "{{var.value.apikey_openapi_seoul_go_kr}}/json/tbCycleRentUseDayInfo",
             "base_dt_col": "RENT_DT",
+            "base_dt": "{{(data_interval_end.in_timezone('Asia/Seoul') + macros.dateutil.relativedelta.relativedelta(days=-1)) | ds_nodash}}",
         },
         poke_interval=600,
         mode="reschedule",
