@@ -10,7 +10,7 @@ from airflow.hooks.base import BaseHook
 
 
 class SeoulApiDateSensor(BaseSensorOperator):
-    template_fields = ("endpoint",)
+    template_fields = ("endpoint", "base_dt")
 
     def __init__(self, dataset_nm, base_dt_col, base_dt=None, day_off=0, **kwargs):
         """
@@ -24,7 +24,7 @@ class SeoulApiDateSensor(BaseSensorOperator):
             "{{var.value.apikey_openapi_seoul_go_kr}}/json/" + dataset_nm + "/1/100"
         )
         self.base_dt_col = base_dt_col
-        self.base_dt = base_dt        
+        self.base_dt = base_dt
         self.day_off = day_off
 
     def poke(self, context):
@@ -34,7 +34,9 @@ class SeoulApiDateSensor(BaseSensorOperator):
         from dateutil.relativedelta import relativedelta
 
         connection = BaseHook.get_connection(self.http_conn_id)
-        url = f"http://{connection.host}/{connection.port}/{self.endpoint}/{self.base_dt}"
+        url = (
+            f"http://{connection.host}/{connection.port}/{self.endpoint}/{self.base_dt}"
+        )
         self.log.info(f"request url:{url}")
         response = requests.get(url)
 
