@@ -68,7 +68,7 @@ class SeoulApiToCsvOperator(BaseOperator):
         session.mount("https://", adapter)
         session.headers.update({"Connection": "keep-alive"})
 
-        response = session.get(request_url, headers)
+        response = session.get(request_url, headers=headers)
         contents = json.loads(response.text)
 
         key_nm = list(contents.keys())[0]
