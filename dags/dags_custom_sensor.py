@@ -22,7 +22,7 @@ with DAG(
     tb_cycle_failure_report_sensor = SeoulApiDateSensor(
         task_id="tb_cycle_failure_report_sensor",
         dataset_nm="tbCycleFailureReport",
-        base_dt_col="REGDTTM",
+        base_dt_col="regDttm",
         base_dt="{{(data_interval_end.in_timezone('Asia/Seoul') + macros.dateutil.relativedelta.relativedelta(days=-1)) | ds_nodash}}",
         day_off=-1,
         poke_interval=600,
