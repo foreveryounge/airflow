@@ -58,7 +58,7 @@ class SeoulApiToCsvOperator(BaseOperator):
             request_url = f"{base_url}/{start_row}/{end_row}/{self.base_dt}"
 
         retry_strategy = Retry(
-            total=30,  # Maximum number of retries
+            total=5,  # Maximum number of retries
             status_forcelist=[429, 500, 502, 503, 504],
         )
         session = requests.Session()
