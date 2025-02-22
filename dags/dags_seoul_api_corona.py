@@ -15,7 +15,7 @@ with DAG(
         dataset_nm="tbCycleRentUseDayInfo",
         path="/opt/airflow/files/tbCycleRentUseDayInfo/{{data_interval_end.in_timezone('Asia/Seoul') | ds_nodash}}",
         file_name="tbCycleRentUseDayInfo.csv",
-        base_dt="{{(data_interval_end.in_timezone('Asia/Seoul') - macros.dateutil.relativedelta.relativedelta(days=1)) | ds_nodash}}",
+        base_dt="{{data_interval_end.in_timezone('Asia/Seoul') | ds_nodash}}",
     )
 
     """서울시 공공자전거 고장신고 내역"""
@@ -24,7 +24,7 @@ with DAG(
         dataset_nm="tbCycleFailureReport",
         path="/opt/airflow/files/tbCycleFailureReport/{{data_interval_end.in_timezone('Asia/Seoul') | ds_nodash}}",
         file_name="tbCycleFailureReport.csv",
-        base_dt="{{(data_interval_end.in_timezone('Asia/Seoul') - macros.dateutil.relativedelta.relativedelta(days=1)) | ds_nodash}}",
+        base_dt="{{data_interval_end.in_timezone('Asia/Seoul') | ds_nodash}}",
     )
 
     tb_cycle_rent_use_dayinfo >> tb_cycle_failure_report

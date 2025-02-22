@@ -25,8 +25,6 @@ class SeoulApiToCsvOperator(BaseOperator):
         end_row = 1000
 
         while True:
-            from time import sleep
-
             self.log.info(f"시작:{start_row}")
             self.log.info(f"끝:{end_row}")
             row_df = self._call_api(self.base_url, start_row, end_row)
@@ -36,7 +34,6 @@ class SeoulApiToCsvOperator(BaseOperator):
             else:
                 start_row = end_row + 1
                 end_row += 1000
-            sleep(1)
 
         if not os.path.exists(self.path):
             os.system(f"mkdir -p {self.path}")
