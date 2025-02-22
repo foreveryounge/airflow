@@ -35,17 +35,15 @@ with DAG(
                 f"{base_dt_col} 컬럼은 YYYY.MM.DD 또는 YYYY/MM/DD 형태가 아닙니다."
             )
 
-        update_ymd = (
-            kwargs.get("data_interval_end").in_timezone("Asia/Seoul")
-            - timedelta(days=1)
-        ).strftime("%Y-%m-%d")
+        today_ymd = kwargs.get("data_interval_end").in_timezone("Asia/Seoul")
+        update_ymd = (today_ymd - timedelta(days=1)).strftime("%Y-%m-%d")
 
         if last_date >= update_ymd:
-            print(f"Update 완료 (배치 날짜: {update_ymd} / API Last 날짜: {last_date})")
+            print(f"Update 완료 (배치 날짜: {today_ymd} / API Last 날짜: {last_date})")
             return True
         else:
             print(
-                f"Update 미완료 (배치 날짜: {update_ymd} / API Last 날짜: {last_date})"
+                f"Update 미완료 (배치 날짜: {today_ymd} / API Last 날짜: {last_date})"
             )
             return False
 
