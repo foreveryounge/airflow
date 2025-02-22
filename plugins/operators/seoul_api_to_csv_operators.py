@@ -44,11 +44,9 @@ class SeoulApiToCsvOperator(BaseOperator):
     def _call_api(self, base_url, start_row, end_row):
         import requests
         import json
-        from urllib3.util.retry import Retry
-        from requests.adapters import HTTPAdapter
 
         headers = {
-            "Content-Type": "application/json",
+            "Content-type": "application/json",
             "charset": "utf-8",
             "Accept": "*/*",
         }
@@ -57,17 +55,7 @@ class SeoulApiToCsvOperator(BaseOperator):
         if self.base_dt is not None:
             request_url = f"{base_url}/{start_row}/{end_row}/{self.base_dt}"
 
-        retry_strategy = Retry(
-            total=5,  # Maximum number of retries
-            status_forcelist=[500, 502, 503, 504],
-        )
-        session = requests.Session()
-        # # Create an HTTP adapter with the retry strategy and mount it to session
-        adapter = HTTPAdapter(max_retries=retry_strategy)
-        session.mount("http://", adapter)
-        session.mount("https://", adapter)
-
-        response = session.get(request_url, headers=headers)
+        response = requests.get(request_url, headers)
         contents = json.loads(response.text)
 
         key_nm = list(contents.keys())[0]
