@@ -12,7 +12,7 @@ from airflow.hooks.base import BaseHook
 class SeoulApiDateSensor(BaseSensorOperator):
     template_fields = ("endpoint",)
 
-    def __init__(self, dataset_nm, base_dt_col, day_off=0, **kwargs):
+    def __init__(self, dataset_nm, base_dt_col, base_dt=None, day_off=0, **kwargs):
         """
         dataset_nm: 서울시 공공데이터 포털에서 센싱하고자 하는 데이터셋 명
         base_dt_col: 센싱 기준 컬럼 (YYYY.mm.dd... or YYYY/mm/dd... 형태만 가능)
@@ -24,6 +24,7 @@ class SeoulApiDateSensor(BaseSensorOperator):
             "{{var.value.apikey_openapi_seoul_go_kr}}/json/" + dataset_nm + "/1/100"
         )
         self.base_dt_col = base_dt_col
+        self.base_dt = base_dt        
         self.day_off = day_off
 
     def poke(self, context):
@@ -33,11 +34,7 @@ class SeoulApiDateSensor(BaseSensorOperator):
         from dateutil.relativedelta import relativedelta
 
         connection = BaseHook.get_connection(self.http_conn_id)
-        search_ymd = (
-            context.get("data_interval_end").in_timezone("Asia/Seoul")
-            + relativedelta(days=self.day_off)
-        ).strftime("%Y-%m-%d")
-        url = f"http://{connection.host}/{connection.port}/{self.endpoint}/{search_ymd}"
+        url = f"http://{connection.host}/{connection.port}/{self.endpoint}/{self.base_dt}"
         self.log.info(f"request url:{url}")
         response = requests.get(url)
 
@@ -47,6 +44,10 @@ class SeoulApiDateSensor(BaseSensorOperator):
         last_dt = row_data[0].get(self.base_dt_col)
         last_date = last_dt[:10]
         last_date = last_date.replace(".", "-").replace("/", "-")
+        search_ymd = (
+            context.get("data_interval_end").in_timezone("Asia/Seoul")
+            + relativedelta(days=self.day_off)
+        ).strftime("%Y-%m-%d")
 
         try:
             import pendulum
