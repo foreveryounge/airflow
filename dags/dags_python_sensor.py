@@ -13,6 +13,7 @@ with DAG(
     def check_api_update(http_conn_id, endpoint, base_dt_col, base_dt, **kwargs):
         import requests
         import json
+        from datetime import timedelta
 
         connection = BaseHook.get_connection(http_conn_id)
         url = f"http://{connection.host}:{connection.port}/{endpoint}/1/100/{base_dt}"
@@ -35,11 +36,9 @@ with DAG(
             )
 
         update_ymd = (
-            kwargs.get("data_interval_end")  # 배치가 도는 당일 날짜
-            .in_timezone("Asia/Seoul")
-            .timedelta(days=-1)
-            .strftime("%Y-%m-%d")
-        )
+            kwargs.get("data_interval_end").in_timezone("Asia/Seoul")
+            - timedelta(days=1)
+        ).strftime("%Y-%m-%d")
 
         if last_date >= update_ymd:
             print(f"Update 완료 (배치 날짜: {update_ymd} / API Last 날짜: {last_date})")
