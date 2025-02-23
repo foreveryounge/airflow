@@ -39,4 +39,9 @@ with DAG(
         sla=timedelta(seconds=30),
     )
 
-    task_slp_30s_sla_70s > task_slp_60s_sla_70s > task_slp_10s_sla_70s > task_slp_10s_sla_30s
+    (
+        task_slp_30s_sla_70s
+        >> task_slp_60s_sla_70s
+        >> task_slp_10s_sla_70s
+        >> task_slp_10s_sla_30s
+    )
