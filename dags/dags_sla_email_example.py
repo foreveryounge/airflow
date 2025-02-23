@@ -34,8 +34,8 @@ with DAG(
     )
 
     task_slp_10s_sla_30s = BashOperator(
-        task_id="task_slp_30s_sla_70s",
-        bash_command="sleep 30",
+        task_id="task_slp_10s_sla_30s",
+        bash_command="sleep 10",
         sla=timedelta(seconds=30),
     )
 
