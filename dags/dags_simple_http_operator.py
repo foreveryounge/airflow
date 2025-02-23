@@ -5,7 +5,7 @@ from airflow.providers.http.operators.http import HttpOperator
 from airflow.decorators import task
 
 with DAG(
-    dag_id="dag_simple_http_operator",
+    dag_id="dags_simple_http_operator",
     schedule=None,
     start_date=pendulum.datetime(2025, 2, 1, tz="Asia/Seoul"),
     catchup=False,
